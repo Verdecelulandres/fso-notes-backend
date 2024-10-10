@@ -19,7 +19,6 @@
     "express": "^4.17.3"
   },
   "devDependencies": {
-    "@flydotio/dockerfile": "^0.5.9",
     "nodemon": "^2.0.22"
   }
 }
