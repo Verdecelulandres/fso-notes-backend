@@ -1,4 +1,5 @@
 const express = require('express');
+const Note = require('./models/note');
 
 const app = express();
 app.use(express.json());
@@ -36,7 +37,9 @@ app.get('/', (request, response) => {
     response.send('<h1>Hello world</h1>');
 });
 app.get('/api/notes', (request, response) => {
-    response.json(notes);
+    Note.find({}).then(notes => {
+        response.json(notes);
+    });
 });
 app.get('/api/notes/:id', (request, response) => {
     const id = request.params.id;
