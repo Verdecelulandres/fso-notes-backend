@@ -80,10 +80,13 @@ app.post('/api/notes', (request, response) => {
         response.json(note);
     });
 });
-app.delete('/api/notes/:id', (request, response) => {
+app.delete('/api/notes/:id', (request, response, next) => {
     const id = request.params.id;
-    notes = notes.filter(note => note.id !== id);
-    response.status(204).end();
+    Note.findByIdAndDelete(id)
+        .then(result => {
+            response.status(204).end();
+        })
+        .catch(error => next(error));
 });
 
 const unknownEndpoint = (request, response) => {
@@ -94,7 +97,7 @@ app.use(unknownEndpoint);
 
 const errorHandler = (error, request, response, next) => {
     console.error(error.message);
-    
+
     if (error.name === 'CastError') {
         return response.status(400).send({ error: 'malformed id' });
     }
