@@ -3,8 +3,8 @@ const express = require('express');
 const Note = require('./models/note');
 
 const app = express();
-app.use(express.json());
 app.use(express.static('dist'));
+app.use(express.json());
 
 const requestLogger = (request, response, next) => {
     console.log('Method:', request.method)
@@ -42,19 +42,18 @@ app.get('/api/notes', (request, response) => {
         response.json(notes);
     });
 });
-app.get('/api/notes/:id', (request, response) => {
+app.get('/api/notes/:id', (request, response, next) => {
     const id = request.params.id;
     Note.findById(id)
         .then(note => {
-            console.log(note);
-            response.json(note);
+            if (note) {
+                console.log(note);
+                response.json(note);
+            } else {
+                response.status(404).end();
+            }
         })
-        .catch(error => {
-            console.log(error);
-            response.status(400).json({
-                error: error.message
-            });
-        })
+        .catch(error => next(error));
 });
 
 const generateId = () => {
@@ -92,6 +91,18 @@ const unknownEndpoint = (request, response) => {
 }
 
 app.use(unknownEndpoint);
+
+const errorHandler = (error, request, response, next) => {
+    console.error(error.message);
+    
+    if (error.name === 'CastError') {
+        return response.status(400).send({ error: 'malformed id' });
+    }
+
+    next(error);
+}
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
