@@ -9,3 +9,11 @@ Content-type: application/json
 }
 ###
 DELETE http://localhost:3001/api/notes/whatDaHell
+###
+PUT http://localhost:3001/api/notes/6a7bb0f530d345ca2b77f4b9
+Content-Type: application/json
+
+{
+    "content": "Changed",
+    "important": true
+}

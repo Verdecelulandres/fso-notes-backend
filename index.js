@@ -88,6 +88,23 @@ app.delete('/api/notes/:id', (request, response, next) => {
         })
         .catch(error => next(error));
 });
+app.put('/api/notes/:id', (request, response, next) => {
+    const { content, important } = request.body;
+    const id = request.params.id;
+    Note.findById(id)
+        .then(note => {
+            if (!note) {
+                return response.status(404).end();
+            }
+            note.content = content;
+            note.important = important;
+
+            return note.save().then(updatedNote => {
+                response.json(updatedNote);
+            });
+        })
+        .catch(error => next(error));
+});
 
 const unknownEndpoint = (request, response) => {
     response.status(404).send({ error: 'unknown endpoint' })
