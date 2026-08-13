@@ -34,8 +34,8 @@ const Note = mongoose.model('Note', noteSchema)
 // })
 // Stored documents can be retrieved using the find() method of our model.
 Note.find({ important: false }).then(result => {
-    result.forEach(note => {
-        console.log(note);
-    });
-    mongoose.connection.close();
-});
+  result.forEach(note => {
+    console.log(note)
+  })
+  mongoose.connection.close()
+})
