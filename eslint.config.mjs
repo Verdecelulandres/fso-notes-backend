@@ -23,5 +23,8 @@ export default defineConfig(
         '@stylistic/js/semi': ['error', 'never'],
       },
     },
+    {
+      ignores: ['dist/**'],
+    },
   ]
 );
