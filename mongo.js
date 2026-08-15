@@ -7,7 +7,8 @@ if (process.argv.length < 3) {
 
 const password = process.argv[2]
 
-const url = `mongodb+srv://andreslaverde_db_user:${password}@cluster0.io7wr4m.mongodb.net/noteApp?retryWrites=true&w=majority&appName=Cluster0`
+//This is the test DB url.
+const url = `mongodb+srv://andreslaverde_db_user:${password}@cluster0.io7wr4m.mongodb.net/testNoteApp?retryWrites=true&w=majority&appName=Cluster0`
 
 mongoose.set('strictQuery',false)
 
@@ -22,20 +23,20 @@ const noteSchema = new mongoose.Schema({
 const Note = mongoose.model('Note', noteSchema)
 
 // Using the model as a constructor we can create a document.
-// const note = new Note({
-//   content: 'Not an important note',
-//   important: false,
-// })
+const note = new Note({
+  content: process.argv[3] ?? 'Not an important note',
+  important: process.argv[4] ?? false,
+})
 
 // The objects created with the model's constructor also inherit methods to interact with the DB .
-// note.save().then(result => {
-//   console.log('note saved!')
-//   mongoose.connection.close()
-// })
-// Stored documents can be retrieved using the find() method of our model.
-Note.find({ important: false }).then(result => {
-  result.forEach(note => {
-    console.log(note)
-  })
+note.save().then(result => {
+  console.log(`note: ${result} was saved!`)
   mongoose.connection.close()
 })
+// Stored documents can be retrieved using the find() method of our model.
+// Note.find({ important: true }).then(result => {
+//   result.forEach(note => {
+//     console.log(note)
+//   })
+//   mongoose.connection.close()
+// })
