@@ -1,7 +1,11 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-  username: String,
+  username: {
+    type: String,
+    required: true,
+    unique: true
+  },
   name: String,
   passwordHash: String,
   notes: [
@@ -15,7 +19,7 @@ const userSchema = new mongoose.Schema({
 // Override toJSON method.
 userSchema.set('toJSON', {
   transform: (document, returnedObject) => {
-    returnedObject.id = returnedObject._id.toStrong();
+    returnedObject.id = returnedObject._id.toString();
     delete returnedObject._id;
     delete returnedObject.__v;
     // remove password has from queries.
